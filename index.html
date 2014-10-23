@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html ng-app="changeValue">
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="lib/angular.js"></script>
+    <title></title>
+</head>
+<body>
+
+<script>
+    angular.module('changeValue', []).
+            controller('MainController', ['$scope', function ($scope) {
+                var c = document.getElementById("canvas");
+                var ctx = c.getContext("2d");
+                $scope.number = 5;
+                $scope.step = 3;
+                var x, y;
+                var r = 200;
+                var xc = 250;
+                var yc = 250;
+
+
+                var drawStarNumber = function (number) {
+                    ctx.clearRect (0 , 0 , c.width, c.height );
+                    var angle = 2 * Math.PI / number;
+                    var step = $scope.step;
+//                    var step = parseInt((number - 1) / 2);
+                    ctx.beginPath();
+                    ctx.arc(xc, yc, r, 0, 2 * Math.PI);
+                    ctx.stroke();
+
+                    for (var i = 1; i <= number; i++) {
+                        ctx.beginPath();
+                        x = Math.floor(Math.sin(Math.PI + angle * i) * r) + xc;
+                        y = Math.floor(Math.cos(Math.PI + angle * i) * r) + yc;
+                        ctx.moveTo(x, y);
+                        x = Math.floor(Math.sin(Math.PI + angle * (i + step)) * r) + xc;
+                        y = Math.floor(Math.cos(Math.PI + angle * (i + step)) * r) + yc;
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                    }
+                };
+                var drawStarStep = function (step) {
+                    var number = $scope.number;
+                    ctx.clearRect (0 , 0 , c.width, c.height );
+                    var angle = 2 * Math.PI / number;
+//                    var step = parseInt((number - 1) / 2);
+                    ctx.beginPath();
+                    ctx.arc(xc, yc, r, 0, 2 * Math.PI);
+                    ctx.stroke();
+
+                    for (var i = 1; i <= number; i++) {
+                        ctx.beginPath();
+                        x = Math.floor(Math.sin(Math.PI + angle * i) * r) + xc;
+                        y = Math.floor(Math.cos(Math.PI + angle * i) * r) + yc;
+                        ctx.moveTo(x, y);
+                        x = Math.floor(Math.sin(Math.PI + angle * (i + step)) * r) + xc;
+                        y = Math.floor(Math.cos(Math.PI + angle * (i + step)) * r) + yc;
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                    }
+                };
+                $scope.$watch("step", drawStarStep);
+                $scope.$watch("number", drawStarNumber);
+            }]);
+</script>
+<div ng-controller="MainController">
+    <input type="number" ng-model="number"/>
+    <input type="number" ng-model="step"/>
+    <canvas height="600px" width="600px" id="canvas"></canvas>
+</div>
+</body>
+</html>
